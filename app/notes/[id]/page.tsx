@@ -406,7 +406,7 @@ There is no time like the present moment. Because the present moment is the only
 
 Earn a lot of money.
 Buy two cars. Minimum.
-Develop BP and sugar by forty. That means you're doing well.
+Develop BP and diabetes by forty. That means you're doing well.
 
 Send your kids to another country.
 Post airport photos.
