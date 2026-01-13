@@ -182,9 +182,14 @@ export default function Work() {
               </div>
 
               <div className="pt-6 border-t border-border/30">
-                <p className="inline-block text-foreground/50 text-sm">
-                  Coming soon
-                </p>
+                <a 
+                  href="https://aikra.live"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-foreground hover:text-primary transition-colors text-sm group"
+                >
+                  Visit Aikra → <span className="inline-block group-hover:translate-x-1 transition-transform">Live</span>
+                </a>
               </div>
             </div>
           </div>
