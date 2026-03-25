@@ -202,8 +202,8 @@ function ActScene({
     offset: ["start end", "end start"]
   })
 
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [50, 0, -50])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.45, 0.55, 1], [20, 0, 0, -20])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
 
   return (
     <section ref={ref} className="min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 relative">
