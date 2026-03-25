@@ -208,7 +208,7 @@ function ActScene({
   return (
     <section ref={ref} className="min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 relative">
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-24 items-start text-balance">
-        <motion.div style={{ y, opacity }} className="sticky top-32">
+        <motion.div style={{ y, opacity }} className="relative md:sticky md:top-32 mb-12 md:mb-0">
           <p className={`text-[10px] font-sans uppercase tracking-[0.4em] mb-6 ${mutedColor}`}>Act {act}</p>
           <h2 className={`font-serif text-5xl md:text-7xl font-light leading-[0.8] ${textColor}`}>
             {title}
