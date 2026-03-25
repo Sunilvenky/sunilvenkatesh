@@ -227,3 +227,14 @@
 .animate-text-reveal {
   animation: text-reveal 0.8s ease-out forwards;
 }
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
