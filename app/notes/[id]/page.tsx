@@ -2,10 +2,18 @@
 
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { motion, useScroll, useSpring } from "framer-motion"
 
 export default function NoteDetail() {
   const params = useParams()
   const noteId = params.id
+
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
 
   const notes: Record<string, any> = {
     "1": {
@@ -692,27 +700,24 @@ always feels heavier than picking it up.`,
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-border/50 py-6 px-4 sticky top-0 bg-background/95 backdrop-blur z-10">
-        <div className="max-w-2xl mx-auto">
-          <Link href="/notes" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-            ← back to notes
-          </Link>
-        </div>
-      </header>
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-foreground z-50 origin-left"
+        style={{ scaleX }}
+      />
 
       {/* Article */}
-      <article className="py-24 px-4">
-        <div className="max-w-2xl mx-auto">
-          <header className="mb-16">
-            <p className="text-muted-foreground text-sm mb-4">{note.date} · {note.readTime}</p>
-            <h1 className="font-serif text-4xl md:text-5xl leading-tight">{note.title}</h1>
+      <article className="py-24 px-4 pt-48 bg-background relative z-10">
+        <div className="max-w-3xl mx-auto">
+          <header className="mb-24 text-center">
+            <p className="font-sans text-xs uppercase tracking-[0.4em] opacity-40 mb-8">{note.date}</p>
+            <h1 className="font-serif text-5xl md:text-7xl leading-[1.1] font-light text-balance mb-8">{note.title}</h1>
+            <p className="font-sans text-xs uppercase tracking-[0.2em] opacity-40">Reading time: {note.readTime}</p>
           </header>
 
           {/* Content */}
-          <div className="space-y-6">
+          <div className="space-y-10 font-serif text-xl md:text-2xl leading-relaxed text-foreground/80">
             {note.content.split('\n\n').map((paragraph: string, index: number) => (
-              <p key={index} className="text-foreground/80 text-lg leading-relaxed">
+              <p key={index} className={index === 0 ? "first-letter:text-7xl first-letter:font-light first-letter:float-left first-letter:pr-4 first-letter:mt-2 first-letter:text-primary" : ""}>
                 {paragraph.split('\n').map((line: string, lineIndex: number) => (
                   <span key={lineIndex}>
                     {line}

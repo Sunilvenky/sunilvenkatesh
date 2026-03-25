@@ -1,6 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { PageHeader } from "@/components/ui/page-header"
+import { SectionReveal } from "@/components/ui/section-reveal"
+import { SectionCTA } from "@/components/ui/section-cta"
+import { ArrowRight } from "@/components/ui/icons"
 
 export default function Notes() {
   const notes = [
@@ -64,60 +68,86 @@ export default function Notes() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-border/50 py-6 px-4 sticky top-0 bg-background/95 backdrop-blur z-10">
-        <div className="max-w-3xl mx-auto">
-          <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-            ← home
-          </Link>
-        </div>
-      </header>
+      <PageHeader 
+        title="Notes" 
+        subtitle="Observations that didn't fit anywhere else."
+      />
 
-      {/* Intro */}
-      <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="font-serif text-5xl md:text-6xl mb-6">Notes</h1>
-          <p className="text-lg text-muted-foreground">
-            Observations that didn't fit anywhere else.
-          </p>
-        </div>
+      {/* Featured Note */}
+      <section className="py-12 mb-16 max-w-5xl mx-auto px-4">
+        <SectionReveal>
+          <p className="font-sans text-xs uppercase tracking-[0.4em] opacity-40 mb-12 text-center md:text-left">Featured Essay</p>
+          <Link href={`/notes/1`} className="group block relative overflow-hidden rounded-3xl glass p-8 md:p-16 surface-elevated transform-gpu transition-all duration-700 hover:-translate-y-2">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            
+            <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                 <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-widest text-primary/80">
+                   <span>{notes[0].date}</span>
+                   <span>&bull;</span>
+                   <span>{notes[0].readTime}</span>
+                 </div>
+                 <h2 className="font-serif text-4xl md:text-6xl font-light leading-tight group-hover:text-primary transition-colors duration-500 text-balance">
+                    {notes[0].title}
+                 </h2>
+              </div>
+              <div className="space-y-8 md:border-l md:border-primary/20 md:pl-12">
+                <p className="text-foreground/70 leading-relaxed text-xl md:text-2xl text-balance">
+                  {notes[0].excerpt}
+                </p>
+                <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-[0.2em] text-foreground/50 group-hover:text-foreground transition-colors">
+                  <span>Read Full Essay</span>
+                  <ArrowRight className="group-hover:translate-x-2" />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </SectionReveal>
       </section>
 
-      {/* Notes list */}
-      <section className="py-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="space-y-16">
-            {notes.map((note) => (
-              <Link key={note.id} href={`/notes/${note.id}`} className="group block">
-                <article className="space-y-4">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h2 className="font-serif text-2xl md:text-3xl group-hover:text-primary transition-colors">
-                      {note.title}
-                    </h2>
-                    <span className="text-sm text-muted-foreground flex-shrink-0">{note.readTime}</span>
+      {/* Archive Notes list */}
+      <section className="py-12 mb-32 max-w-5xl mx-auto px-4">
+        <p className="font-sans text-xs uppercase tracking-[0.4em] opacity-40 mb-12 text-center md:text-left">Archive</p>
+        <div className="flex flex-col">
+          {notes.slice(1).map((note, index) => (
+            <SectionReveal delay={index * 0.05} key={note.id}>
+              <Link href={`/notes/${note.id}`} className="group block border-t border-border/10 hover:bg-card/20 transition-colors duration-500 relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <article className="flex flex-col md:flex-row items-start md:items-baseline gap-6 md:gap-16 py-12 px-6 transform-gpu transition-all duration-500 group-hover:translate-x-4">
+                  
+                  <span className="font-serif text-3xl md:text-4xl opacity-20 group-hover:opacity-40 group-hover:text-primary transition-colors duration-500 shrink-0">
+                    {String(index + 2).padStart(2, '0')}
+                  </span>
+                  
+                  <div className="space-y-4 flex-grow">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h2 className="font-serif text-2xl md:text-3xl font-light group-hover:text-primary transition-colors">
+                        {note.title}
+                      </h2>
+                      <span className="text-sm text-muted-foreground flex-shrink-0 hidden md:block">{note.readTime}</span>
+                    </div>
+                    <p className="text-foreground/70 leading-relaxed text-lg text-balance line-clamp-2 md:line-clamp-none">
+                      {note.excerpt}
+                    </p>
+                    <div className="flex justify-between items-center pt-4">
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground">{note.date}</p>
+                      <span className="text-sm text-muted-foreground md:hidden">{note.readTime}</span>
+                    </div>
                   </div>
-                  <p className="text-foreground/70 leading-relaxed">
-                    {note.excerpt}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{note.date}</p>
                 </article>
               </Link>
-            ))}
-          </div>
+            </SectionReveal>
+          ))}
+          <div className="border-t border-border/10" />
         </div>
       </section>
-
-      {/* Space */}
-      <div className="h-32" />
 
       {/* Footer thought */}
-      <section className="py-16 px-4 border-t border-border/30">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-muted-foreground italic">
-            More observations accumulate. Slowly.
-          </p>
-        </div>
-      </section>
+      <SectionCTA 
+        message="More observations accumulate. Slowly." 
+        buttonText="Return Home"
+        href="/"
+      />
     </main>
   )
 }

@@ -2,10 +2,12 @@
 
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { motion, useScroll } from "framer-motion"
 
 export default function ProjectDetail() {
   const params = useParams()
   const projectId = params.id as string
+  const { scrollYProgress } = useScroll()
 
   const projectsData: Record<string, any> = {
     "whatsapp-ai-system": {
@@ -136,8 +138,8 @@ export default function ProjectDetail() {
     return (
       <main className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-serif text-4xl font-bold mb-4">Project not found</h1>
-          <Link href="/work" className="text-primary hover:text-primary/80">
+          <h1 className="font-serif text-4xl font-light mb-4">Project not found</h1>
+          <Link href="/work" className="text-primary hover:text-primary/80 transition-colors">
             Back to work →
           </Link>
         </div>
@@ -151,110 +153,130 @@ export default function ProjectDetail() {
   const prevProjectId = allProjectIds[(currentIndex - 1 + allProjectIds.length) % allProjectIds.length]
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-border py-6 px-4 sticky top-0 bg-background/95 backdrop-blur z-10">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link href="/work" className="text-accent hover:text-accent/80 transition-colors text-sm">
-            ← back to work
-          </Link>
-          <div className="text-xs text-muted-foreground">
-            {currentIndex + 1} of {allProjectIds.length}
-          </div>
-        </div>
-      </header>
-
-      {/* Hero section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div>
-            <p className="text-primary text-xs font-semibold uppercase tracking-widest mb-4">{project.year}</p>
-            <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-4">{project.title}</h1>
-            <p className="text-muted-foreground">Role: {project.role}</p>
-          </div>
-
-          {/* Hero image */}
-          <div className="rounded-lg overflow-hidden border border-border">
-            <img src={project.image || "/placeholder.svg"} alt={project.title} className="w-full h-96 object-cover" />
-          </div>
+    <main className="min-h-screen bg-background text-foreground pt-32 relative">
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-primary z-50 origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+      {/* Full-bleed Hero Image */}
+      <section className="px-4 mb-20">
+        <div className="max-w-[1400px] mx-auto rounded-3xl overflow-hidden aspect-[21/9] relative">
+          <img src={project.image || "/placeholder.svg"} alt={project.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
         </div>
       </section>
 
-      {/* Content sections */}
-      <section className="py-20 px-4 bg-card/30">
-        <div className="max-w-4xl mx-auto space-y-16">
-          {/* Context */}
-          <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-secondary">Context</p>
-            <p className="text-lg text-foreground leading-relaxed max-w-3xl">{project.context}</p>
-          </div>
+      {/* Hero Headings */}
+      <section className="px-4 mb-16">
+        <div className="max-w-7xl mx-auto text-center space-y-6">
+          <p className="text-xs uppercase tracking-[0.4em] font-sans opacity-50">{project.year}</p>
+          <h1 className="font-serif text-5xl md:text-8xl font-light leading-none">{project.title}</h1>
+          <p className="text-xl md:text-2xl font-serif italic text-muted-foreground pt-4">{project.role}</p>
+        </div>
+      </section>
 
-          {/* Challenge */}
-          <div className="space-y-4 border-t border-border pt-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">The Challenge</h2>
-            <p className="text-lg text-foreground leading-relaxed max-w-3xl">{project.challenge}</p>
-          </div>
-
-          {/* Solution */}
-          <div className="space-y-4 border-t border-border pt-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">The Solution</h2>
-            <p className="text-lg text-foreground leading-relaxed max-w-3xl">{project.solution}</p>
-          </div>
-
-          {/* Impact */}
-          <div className="space-y-4 border-t border-border pt-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">The Impact</h2>
-            <p className="text-lg text-foreground leading-relaxed max-w-3xl">{project.impact}</p>
-          </div>
-
-          {/* Key Learnings */}
-          <div className="space-y-8 border-t border-border pt-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">Key Learnings</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {project.learnings.map((learning: string, index: number) => (
-                <div key={index} className="p-6 bg-background border border-border rounded-lg">
-                  <p className="text-foreground leading-relaxed">{learning}</p>
-                </div>
-              ))}
+      {/* Content section with sticky sidebar */}
+      <section className="py-20 px-8 bg-card/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+          
+          {/* Sticky Sidebar */}
+          <div className="md:col-span-4 sticky top-40 space-y-12 shrink-0">
+            <div className="space-y-6">
+              <p className="text-[10px] uppercase tracking-[0.4em] font-sans opacity-40">Focus Areas</p>
+              <div className="flex flex-wrap gap-2">
+                {project.focusAreas.map((area: string) => (
+                  <span
+                    key={area}
+                    className="px-4 py-2 text-xs font-sans uppercase tracking-widest bg-foreground/5 text-foreground border border-foreground/10 rounded-full"
+                  >
+                    {area}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Focus Areas */}
-          <div className="space-y-4 border-t border-border pt-12">
-            <p className="text-xs font-semibold uppercase tracking-widest text-secondary">Focus Areas</p>
-            <div className="flex flex-wrap gap-2">
-              {project.focusAreas.map((area: string) => (
-                <span
-                  key={area}
-                  className="px-3 py-1 text-xs font-medium bg-secondary/10 text-secondary border border-secondary/30 rounded-full"
-                >
-                  {area}
+          {/* Main Reading Column */}
+          <div className="md:col-span-8 space-y-32">
+            
+            {/* Context with Drop Cap */}
+            <div className="space-y-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.3em] font-sans opacity-40">Context</p>
+              <div className="font-serif text-2xl md:text-3xl leading-relaxed text-foreground text-balance">
+                <span className="float-left text-7xl md:text-8xl leading-[0.8] pr-4 pt-2 font-serif font-light text-primary">
+                  {project.context.charAt(0)}
                 </span>
-              ))}
+                {project.context.substring(1)}
+              </div>
             </div>
+
+            {/* Challenge */}
+            <div className="space-y-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.3em] font-sans opacity-40">The Challenge</p>
+              <div className="line-accent pl-8 py-2">
+                <p className="text-xl md:text-2xl font-sans font-light leading-relaxed text-foreground/80">
+                  {project.challenge}
+                </p>
+              </div>
+            </div>
+
+            {/* Solution */}
+            <div className="space-y-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.3em] font-sans opacity-40">The Solution</p>
+              <p className="text-lg md:text-xl font-sans font-light leading-relaxed text-foreground/80">
+                {project.solution}
+              </p>
+            </div>
+
+            {/* Impact */}
+            <div className="space-y-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.3em] font-sans opacity-40">The Impact</p>
+              <p className="text-2xl md:text-4xl font-serif text-foreground leading-tight text-balance">
+                {project.impact}
+              </p>
+            </div>
+
+            {/* Key Learnings */}
+            <div className="space-y-12 max-w-3xl border-t border-border/10 pt-16">
+              <h2 className="font-serif text-4xl md:text-5xl font-light">Learnings</h2>
+              <div className="grid gap-8">
+                {project.learnings.map((learning: string, index: number) => (
+                  <div key={index} className="flex gap-8 group">
+                    <span className="font-serif text-2xl opacity-20 group-hover:opacity-100 transition-opacity">0{index + 1}</span>
+                    <p className="text-lg font-sans font-light text-foreground/70 leading-relaxed pt-1 flex-1">{learning}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* Navigation between projects */}
       <section className="py-20 px-4 border-t border-border">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-semibold uppercase tracking-widest text-secondary mb-8">Continue exploring</p>
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-widest text-secondary mb-12">Continue exploring</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Link href={`/work/${prevProjectId}`} className="group">
-              <div className="p-6 bg-card border border-border rounded-lg hover:border-primary transition-colors group-hover:bg-card/50">
-                <p className="text-xs text-muted-foreground mb-2">← Previous</p>
-                <h4 className="font-serif text-lg font-bold group-hover:text-primary transition-colors">
-                  {projectsData[prevProjectId].title}
-                </h4>
+            <Link href={`/work/${prevProjectId}`} className="group relative overflow-hidden rounded-2xl h-48 surface-elevated transform-gpu">
+              <img src={projectsData[prevProjectId].image} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20" />
+              <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
+                <p className="text-xs uppercase tracking-widest opacity-60 mb-2 font-sans">← Previous</p>
+                <h4 className="font-serif text-2xl font-light">{projectsData[prevProjectId].title}</h4>
               </div>
             </Link>
-            <Link href={`/work/${nextProjectId}`} className="group">
-              <div className="p-6 bg-card border border-border rounded-lg hover:border-primary transition-colors group-hover:bg-card/50">
-                <p className="text-xs text-muted-foreground mb-2">Next →</p>
-                <h4 className="font-serif text-lg font-bold group-hover:text-primary transition-colors">
-                  {projectsData[nextProjectId].title}
-                </h4>
+            <Link href={`/work/${nextProjectId}`} className="group relative overflow-hidden rounded-2xl h-48 surface-elevated transform-gpu">
+              <img src={projectsData[nextProjectId].image} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20" />
+              <div className="absolute inset-0 p-8 flex flex-col justify-end items-end text-white text-right">
+                <p className="text-xs uppercase tracking-widest opacity-60 mb-2 font-sans">Next →</p>
+                <h4 className="font-serif text-2xl font-light">{projectsData[nextProjectId].title}</h4>
               </div>
             </Link>
           </div>
@@ -270,6 +292,7 @@ export default function ProjectDetail() {
           </Link>
         </div>
       </section>
+      </motion.div>
     </main>
   )
 }

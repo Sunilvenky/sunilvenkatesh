@@ -47,39 +47,13 @@
   --sidebar-ring: oklch(0.45 0.08 260);
 }
 
-.dark {
-  --background: oklch(0.12 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.15 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.15 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.65 0.08 260);
-  --primary-foreground: oklch(0.12 0 0);
-  --secondary: oklch(0.7 0.04 135);
-  --secondary-foreground: oklch(0.12 0 0);
-  --accent: oklch(0.72 0.03 150);
-  --accent-foreground: oklch(0.12 0 0);
-  --muted: oklch(0.25 0 0);
-  --muted-foreground: oklch(0.6 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.25 0 0);
-  --input: oklch(0.25 0 0);
-  --ring: oklch(0.65 0.08 260);
-  --chart-1: oklch(0.65 0.08 260);
-  --chart-2: oklch(0.7 0.04 135);
-  --chart-3: oklch(0.72 0.03 150);
-  --chart-4: oklch(0.68 0.06 180);
-  --chart-5: oklch(0.7 0.05 140);
-  --sidebar: oklch(0.15 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.08 260);
-  --sidebar-primary-foreground: oklch(0.95 0 0);
-  --sidebar-accent: oklch(0.72 0.03 150);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.25 0 0);
-  --sidebar-ring: oklch(0.65 0.08 260);
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @theme inline {
@@ -128,9 +102,56 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+  
   body {
     @apply bg-background text-foreground;
   }
+  
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+}
+
+/* Base Surfaces & Depth */
+.glass {
+  @apply bg-background/60 backdrop-blur-md border border-foreground/10;
+}
+
+.surface-elevated {
+  @apply bg-card border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] transition-all duration-500;
+}
+
+.line-accent {
+  position: relative;
+}
+.line-accent::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--color-primary), transparent);
+  opacity: 0.5;
+}
+
+/* Cinematic Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.mask-fade-out {
+  mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
 }
 
 /* Cinematic animation foundations */
